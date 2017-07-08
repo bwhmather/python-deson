@@ -1,6 +1,8 @@
 import unittest
 
-from deson import parse_int, parse_float, parse_text, parse_set
+from deson import (
+    parse_int, parse_float, parse_text, parse_set, parse_dictionary,
+)
 
 
 class ParseIntTestCase(unittest.TestCase):
@@ -168,10 +170,38 @@ class ParseSetTestCase(unittest.TestCase):
         self.assertEqual(parsed, {1, 2, 3})
 
 
+class ParseDictionaryTestCase(unittest.TestCase):
+    def test_accept_dictionary(self):
+        parsed = parse_dictionary({"a": 1})
+
+        self.assertEqual(parsed, {"a": 1})
+
+    def test_accept_schema(self):
+        parser = parse_dictionary(schema={
+            'integer': parse_int(),
+            'set': parse_set(allow_duplicates=True),
+        })
+
+        parsed = parser({
+            'integer': 1.0,
+            'set': [1, 1, 2, 2, 3, 3],
+        })
+
+        self.assertEqual(parsed, {'integer': 1, 'set': {1, 2, 3}})
+
+    def test_reject_schema(self):
+        parser = parse_dictionary(schema={
+            'integer': parse_int(),
+        })
+
+        self.assertRaises(TypeError, parser, 1.5)
+
+
 loader = unittest.TestLoader()
 suite = unittest.TestSuite((
     loader.loadTestsFromTestCase(ParseIntTestCase),
     loader.loadTestsFromTestCase(ParseFloatTestCase),
     loader.loadTestsFromTestCase(ParseStringTestCase),
     loader.loadTestsFromTestCase(ParseSetTestCase),
+    loader.loadTestsFromTestCase(ParseDictionaryTestCase),
 ))
