@@ -1,6 +1,6 @@
 import unittest
 
-from deson import parse_int, parse_float, parse_string
+from deson import parse_int, parse_float, parse_text
 
 
 class ParseIntTestCase(unittest.TestCase):
@@ -95,48 +95,48 @@ class ParseFloatTestCase(unittest.TestCase):
 
 class ParseStringTestCase(unittest.TestCase):
     def test_accept_string(self):
-        parsed = parse_string("Hello, World!")
+        parsed = parse_text("Hello, World!")
 
         self.assertEqual(parsed, "Hello, World!")
         self.assertIsInstance(parsed, str)
 
     def test_reject_non_string(self):
-        self.assertRaises(TypeError, parse_string, b"h3110 w0R1d")
-        self.assertRaises(TypeError, parse_string, object())
-        self.assertRaises(TypeError, parse_string, {})
-        self.assertRaises(TypeError, parse_string, [])
-        self.assertRaises(TypeError, parse_string, 1.234)
-        self.assertRaises(TypeError, parse_string, 11)
+        self.assertRaises(TypeError, parse_text, b"h3110 w0R1d")
+        self.assertRaises(TypeError, parse_text, object())
+        self.assertRaises(TypeError, parse_text, {})
+        self.assertRaises(TypeError, parse_text, [])
+        self.assertRaises(TypeError, parse_text, 1.234)
+        self.assertRaises(TypeError, parse_text, 11)
 
     def test_accept_min(self):
-        self.assertEqual(parse_string("123456", min_len=5), "123456")
-        self.assertEqual(parse_string("12345", min_len=5), "12345")
+        self.assertEqual(parse_text("123456", min_len=5), "123456")
+        self.assertEqual(parse_text("12345", min_len=5), "12345")
 
     def test_reject_min(self):
-        self.assertRaises(ValueError, parse_string, "12345", min_len=6)
+        self.assertRaises(ValueError, parse_text, "12345", min_len=6)
 
     def test_accept_max(self):
-        self.assertEqual(parse_string("12345", max_len=6), "12345")
-        self.assertEqual(parse_string("123456", max_len=6), "123456")
+        self.assertEqual(parse_text("12345", max_len=6), "12345")
+        self.assertEqual(parse_text("123456", max_len=6), "123456")
 
     def test_reject_max(self):
-        self.assertRaises(ValueError, parse_string, "12345", max_len=4)
+        self.assertRaises(ValueError, parse_text, "12345", max_len=4)
 
     def test_accept_pattern(self):
-        self.assertEqual(parse_string("a----b", pattern=r"a-*b"), "a----b")
+        self.assertEqual(parse_text("a----b", pattern=r"a-*b"), "a----b")
 
     def test_reject_pattern(self):
         self.assertRaises(
-            ValueError, parse_string, "begin end", pattern=r"end",
+            ValueError, parse_text, "begin end", pattern=r"end",
         )
         self.assertRaises(
-            ValueError, parse_string, "begin end", pattern=r"begin",
+            ValueError, parse_text, "begin end", pattern=r"begin",
         )
 
     def test_required(self):
-        self.assertRaises(TypeError, parse_string, None)
-        self.assertRaises(TypeError, parse_string, None, required=True)
-        self.assertEqual(parse_string(None, required=False), None)
+        self.assertRaises(TypeError, parse_text, None)
+        self.assertRaises(TypeError, parse_text, None, required=True)
+        self.assertEqual(parse_text(None, required=False), None)
 
 
 loader = unittest.TestLoader()

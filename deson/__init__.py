@@ -76,7 +76,7 @@ def parse_float(
         return parse
 
 
-def parse_string(
+def parse_text(
     value=_unset, *, max_len=None, min_len=None, pattern=None, required=True
 ):
     if max_len is not None and min_len is not None:
