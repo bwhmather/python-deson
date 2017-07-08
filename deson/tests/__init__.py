@@ -34,8 +34,8 @@ class ParseIntTestCase(unittest.TestCase):
         self.assertEqual(parse_int(-4, max_value=-4), -4)
 
     def test_reject_imprecise(self):
-        self.assertRaises(ValueError, parse_int(2**53))
-        self.assertRaises(ValueError, parse_int(-2**53))
+        self.assertRaises(ValueError, parse_int, 2**53)
+        self.assertRaises(ValueError, parse_int, -2**53)
 
 
 class ParseFloatTestCase(unittest.TestCase):
@@ -68,15 +68,13 @@ class ParseFloatTestCase(unittest.TestCase):
 
     def test_reject_min(self):
         self.assertRaises(ValueError, parse_float, 1.99999, min_value=2)
-        self.assertRaises(ValueError, parse_float, 1.234, min_value=1.234)
 
     def test_accept_max(self):
         self.assertEqual(parse_float(1.99999, max_value=2), 1.99999)
         self.assertEqual(parse_float(1.234, max_value=1.234), 1.234)
 
     def test_reject_max(self):
-        self.assertRaises(ValueError, parse_float, 2, max_value=1)
-        self.assertRaises(ValueError, parse_float, -4, max_value=-4)
+        self.assertRaises(ValueError, parse_float, 1.000001, max_value=1)
 
 
 loader = unittest.TestLoader()
