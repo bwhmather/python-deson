@@ -28,7 +28,16 @@ def parse_int(value, *, max_value=None, min_value=None):
 
 
 def parse_float(value, *, max_value=None, min_value=None):
-    raise NotImplementedError()
+    if not isinstance(value, numbers.Real):
+        raise TypeError()
+
+    if max_value is not None and value > max_value:
+        raise ValueError()
+
+    if min_value is not None and value < min_value:
+        raise ValueError()
+
+    return float(value)
 
 
 def parse_string(value, *, max_len=None, min_len=None, pattern=None):
