@@ -1,6 +1,6 @@
 import unittest
 
-from deson import parse_int, parse_float, parse_text
+from deson import parse_int, parse_float, parse_text, parse_set
 
 
 class ParseIntTestCase(unittest.TestCase):
@@ -139,9 +139,39 @@ class ParseStringTestCase(unittest.TestCase):
         self.assertEqual(parse_text(None, required=False), None)
 
 
+class ParseSetTestCase(unittest.TestCase):
+    def test_accept_list(self):
+        parsed = parse_set([1, 2, 3, "a", "b", "c"])
+
+        self.assertEqual(parsed, {1, 2, 3, "a", "b", "c"})
+        self.assertIsInstance(parsed, set)
+
+    def test_reject_non_list(self):
+        self.assertRaises(TypeError, parse_text, b"h3110 w0R1d")
+        self.assertRaises(TypeError, parse_text, object())
+        self.assertRaises(TypeError, parse_text, {})
+        self.assertRaises(TypeError, parse_text, set())
+        self.assertRaises(TypeError, parse_text, 1.234)
+        self.assertRaises(TypeError, parse_text, 11)
+
+    def test_reject_duplicates(self):
+        self.assertRaises(ValueError, parse_set, [1, 1, 2, 2, 3, 3])
+
+    def test_deduplicate_input(self):
+        parsed = parse_set([1, 1, 1, 2, 2, 2, 3, 3, 3], allow_duplicates=True)
+        self.assertEqual(parsed, {1, 2, 3})
+
+    def test_deduplicate_parsed(self):
+        parsed = parse_set(
+            [-1, 1, -2, 2, -3, 3], parse_item=abs, allow_duplicates=True,
+        )
+        self.assertEqual(parsed, {1, 2, 3})
+
+
 loader = unittest.TestLoader()
 suite = unittest.TestSuite((
     loader.loadTestsFromTestCase(ParseIntTestCase),
     loader.loadTestsFromTestCase(ParseFloatTestCase),
     loader.loadTestsFromTestCase(ParseStringTestCase),
+    loader.loadTestsFromTestCase(ParseSetTestCase),
 ))
