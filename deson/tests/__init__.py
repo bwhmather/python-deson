@@ -1,6 +1,6 @@
 import unittest
 
-from deson import parse_int, parse_float
+from deson import parse_int, parse_float, parse_string
 
 
 class ParseIntTestCase(unittest.TestCase):
@@ -92,8 +92,40 @@ class ParseFloatTestCase(unittest.TestCase):
         self.assertRaises(TypeError, parse_float, None, required=True)
         self.assertEqual(parse_float(None, required=False), None)
 
+
+class ParseStringTestCase(unittest.TestCase):
+    def test_accept_string(self):
+        parsed = parse_string("Hello, World!")
+
+        self.assertEqual(parsed, "Hello, World!")
+        self.assertIsInstance(parsed, str)
+
+    def test_reject_non_string(self):
+        self.assertRaises(TypeError, parse_string, b"h3110 w0R1d")
+        self.assertRaises(TypeError, parse_string, object())
+        self.assertRaises(TypeError, parse_string, {})
+        self.assertRaises(TypeError, parse_string, [])
+        self.assertRaises(TypeError, parse_string, 1.234)
+        self.assertRaises(TypeError, parse_string, 11)
+
+    def test_accept_min(self):
+        self.assertEqual(parse_string("123456", min_len=5), "123456")
+        self.assertEqual(parse_string("12345", min_len=5), "12345")
+
+    def test_reject_min(self):
+        self.assertRaises(ValueError, parse_string, "12345", min_len=6)
+
+    def test_accept_max(self):
+        self.assertEqual(parse_string("12345", max_len=6), "12345")
+        self.assertEqual(parse_string("123456", max_len=6), "123456")
+
+    def test_reject_max(self):
+        self.assertRaises(ValueError, parse_string, "12345", max_len=4)
+
+
 loader = unittest.TestLoader()
 suite = unittest.TestSuite((
     loader.loadTestsFromTestCase(ParseIntTestCase),
     loader.loadTestsFromTestCase(ParseFloatTestCase),
+    loader.loadTestsFromTestCase(ParseStringTestCase),
 ))
