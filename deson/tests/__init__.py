@@ -29,9 +29,15 @@ class ParseIntTestCase(unittest.TestCase):
         self.assertEqual(parse_int(2, min_value=1), 2)
         self.assertEqual(parse_int(-4, min_value=-4), -4)
 
+    def test_reject_min(self):
+        self.assertRaises(ValueError, parse_int, -1, min_value=0)
+
     def test_accept_max(self):
         self.assertEqual(parse_int(1, max_value=2), 1)
         self.assertEqual(parse_int(-4, max_value=-4), -4)
+
+    def test_reject_max(self):
+        self.assertRaises(ValueError, parse_int, 11, max_value=10)
 
     def test_reject_imprecise(self):
         self.assertRaises(ValueError, parse_int, 2**53)
