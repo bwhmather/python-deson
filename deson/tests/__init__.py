@@ -133,6 +133,12 @@ class ParseStringTestCase(unittest.TestCase):
             ValueError, parse_string, "begin end", pattern=r"begin",
         )
 
+    def test_required(self):
+        self.assertRaises(TypeError, parse_string, None)
+        self.assertRaises(TypeError, parse_string, None, required=True)
+        self.assertEqual(parse_string(None, required=False), None)
+
+
 loader = unittest.TestLoader()
 suite = unittest.TestSuite((
     loader.loadTestsFromTestCase(ParseIntTestCase),
