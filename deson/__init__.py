@@ -1,6 +1,7 @@
 import sys
 import numbers
 import math
+import re
 
 
 _unset = object()
@@ -84,7 +85,37 @@ def parse_float(
 def parse_string(
     value=_unset, *, max_len=None, min_len=None, pattern=None, required=True
 ):
-    raise NotImplementedError()
+    if max_len is not None and min_len is not None:
+        assert max_len >= min_len
+
+    if pattern is not None and isinstance(pattern, str):
+        pattern = re.compile(pattern)
+
+    def parse(value):
+        if value is None:
+            if required:
+                raise TypeError()
+            else:
+                return None
+
+        if not isinstance(value, str):
+            raise TypeError()
+
+        if max_len is not None and len(value) > max_len:
+            raise ValueError()
+
+        if min_len is not None and len(value) < min_len:
+            raise ValueError()
+
+        if pattern and pattern.match(value) is None:
+            raise ValueError()
+
+        return value
+
+    if value is not _unset:
+        return parse(value)
+    else:
+        return parse
 
 
 def parse_bytes(
