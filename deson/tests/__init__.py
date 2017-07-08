@@ -43,6 +43,11 @@ class ParseIntTestCase(unittest.TestCase):
         self.assertRaises(ValueError, parse_int, 2**53)
         self.assertRaises(ValueError, parse_int, -2**53)
 
+    def test_required(self):
+        self.assertRaises(TypeError, parse_int, None)
+        self.assertRaises(TypeError, parse_int, None, required=True)
+        self.assertEqual(parse_int(None, required=False), None)
+
 
 class ParseFloatTestCase(unittest.TestCase):
     def test_accept_int(self):
@@ -82,6 +87,10 @@ class ParseFloatTestCase(unittest.TestCase):
     def test_reject_max(self):
         self.assertRaises(ValueError, parse_float, 1.000001, max_value=1)
 
+    def test_required(self):
+        self.assertRaises(TypeError, parse_float, None)
+        self.assertRaises(TypeError, parse_float, None, required=True)
+        self.assertEqual(parse_float(None, required=False), None)
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite((
