@@ -80,4 +80,7 @@ class ParseFloatTestCase(unittest.TestCase):
 
 
 loader = unittest.TestLoader()
-suite = unittest.TestSuite(())
+suite = unittest.TestSuite((
+    loader.loadTestsFromTestCase(ParseIntTestCase),
+    loader.loadTestsFromTestCase(ParseFloatTestCase),
+))
