@@ -122,6 +122,16 @@ class ParseStringTestCase(unittest.TestCase):
     def test_reject_max(self):
         self.assertRaises(ValueError, parse_string, "12345", max_len=4)
 
+    def test_accept_pattern(self):
+        self.assertEqual(parse_string("a----b", pattern=r"a-*b"), "a----b")
+
+    def test_reject_pattern(self):
+        self.assertRaises(
+            ValueError, parse_string, "begin end", pattern=r"end",
+        )
+        self.assertRaises(
+            ValueError, parse_string, "begin end", pattern=r"begin",
+        )
 
 loader = unittest.TestLoader()
 suite = unittest.TestSuite((
