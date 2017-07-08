@@ -7,12 +7,6 @@ import re
 _unset = object()
 
 
-def parse_datetime(
-    value=_unset, *, required=True
-):
-    raise NotImplementedError()
-
-
 def parse_int(
     value=_unset, *, max_value=None, min_value=None, required=True
 ):
@@ -118,12 +112,6 @@ def parse_string(
         return parse
 
 
-def parse_bytes(
-    value=_unset, *, max_len=None, min_len=None, required=True
-):
-    raise NotImplementedError()
-
-
 def parse_set(
     value=_unset, *, max_len=None, min_len=None, required=True
 ):
@@ -138,5 +126,23 @@ def parse_array(
 
 def parse_dictionary(
     value=_unset, *, schema, allow_extra=True, required=True
+):
+    raise NotImplementedError()
+
+
+def parse_bytes(
+    value=_unset, *, max_len=None, min_len=None, required=True
+):
+    raise NotImplementedError()
+
+
+def parse_datetime(
+    value=_unset, *, required=True
+):
+    raise NotImplementedError()
+
+
+def parse_uuid(
+    value=_unset, *, required=True
 ):
     raise NotImplementedError()
