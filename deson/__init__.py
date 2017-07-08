@@ -18,6 +18,8 @@ def parse_int(value, *, max_value=None, min_value=None):
     if fractional != 0:
         raise ValueError()
 
+    integer = int(integer)
+
     if max_value is not None and integer > max_value:
         raise ValueError()
 
