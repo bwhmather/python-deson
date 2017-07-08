@@ -113,9 +113,44 @@ def parse_text(
 
 
 def parse_set(
-    value=_unset, *, max_len=None, min_len=None, required=True
+    value=_unset, *,
+    parse_item=lambda item: item,
+    max_len=None, min_len=None,
+    allow_duplicates=False,
+    required=True
 ):
-    raise NotImplementedError()
+    if max_len is not None and min_len is not None:
+        assert max_len >= min_len
+
+    def parse(value):
+        if value is None:
+            if required:
+                raise TypeError()
+            else:
+                return None
+
+        if not isinstance(value, list):
+            raise TypeError()
+
+        result = {
+            parse_item(item) for item in value
+        }
+
+        if not allow_duplicates and len(result) < len(value):
+            raise ValueError()
+
+        if max_len is not None and len(result) > max_len:
+            raise ValueError()
+
+        if min_len is not None and len(result) < min_len:
+            raise ValueError()
+
+        return result
+
+    if value is not _unset:
+        return parse(value)
+    else:
+        return parse
 
 
 def parse_array(
