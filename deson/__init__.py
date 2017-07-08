@@ -15,6 +15,9 @@ def parse_datetime(
 def parse_int(
     value=_unset, *, max_value=None, min_value=None, required=True
 ):
+    if max_value is not None and min_value is not None:
+        assert max_value >= min_value
+
     def parse(value):
         if value is None:
             if required:
@@ -51,6 +54,9 @@ def parse_int(
 def parse_float(
     value=_unset, *, max_value=None, min_value=None, required=True
 ):
+    if max_value is not None and min_value is not None:
+        assert max_value >= min_value
+
     def parse(value):
         if value is None:
             if required:
