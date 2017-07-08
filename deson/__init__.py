@@ -107,7 +107,7 @@ def parse_string(
         if min_len is not None and len(value) < min_len:
             raise ValueError()
 
-        if pattern and pattern.match(value) is None:
+        if pattern and pattern.fullmatch(value) is None:
             raise ValueError()
 
         return value
