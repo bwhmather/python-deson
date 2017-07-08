@@ -1,0 +1,22 @@
+language: python
+sudo: false
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+install:
+  - "pip install -e ."
+  - "pip install coveralls"
+  - "pip install pyflakes"
+  - "pip install pep8"
+  - "pip install pylint"
+
+script:
+  - "coverage run --source=deson setup.py test"
+  - "pep8 deson setup.py"
+  - "pyflakes deson setup.py"
+  - "pylint -E deson setup.py"
+
+after_success:
+  - "coveralls"

@@ -1,0 +1,30 @@
+# Python Deson
+
+[![Build Status](https://travis-ci.org/bwhmather/python-deson.svg?branch=develop)](https://travis-ci.org/bwhmather/python-deson)
+[![Coverage Status](https://coveralls.io/repos/github/bwhmather/python-deson/badge.svg?branch=develop)](https://coveralls.io/github/bwhmather/python-deson?branch=develop)
+
+A python library for buildings to validate parsed json and convert it to a more useful form.
+
+
+## Installation
+
+Recommended method is to use the version from [pypi](https://pypi.python.org/pypi/deson):
+
+```
+pip install deson
+```
+
+Please note that this library supports python 3 only.
+
+
+## Links
+
+- Source code: https://github.com/bwhmather/python-deson
+- Issue tracker: https://github.com/bwhmather/python-deson/issues
+- Continuous integration: https://travis-ci.org/bwhmather/python-deson
+- PyPI: https://pypi.python.org/pypi/deson
+
+
+## License
+
+The project is licensed under the BSD license.  See [LICENSE](./LICENSE) for details.
