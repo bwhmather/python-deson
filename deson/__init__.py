@@ -160,9 +160,45 @@ def parse_array(
 
 
 def parse_dictionary(
-    value=_unset, *, schema, allow_extra=True, required=True
+    value=_unset, *, schema=None, allow_extra=True, rename=None, required=True
 ):
-    raise NotImplementedError()
+    if rename is None:
+        def rename_(key):
+            return key
+    elif isinstance(rename, dict):
+        def rename_(key):
+            return rename.getdefault(key, key)
+    else:
+        rename_ = rename
+
+    def parse(value):
+        if value is None:
+            if required:
+                raise TypeError()
+            else:
+                return None
+
+        if not isinstance(value, dict):
+            raise TypeError()
+
+        if not allow_extra and set(value) - set(schema):
+            raise ValueError()
+
+        if schema is not None:
+            return {
+                rename_(key): parser(value.get(key))
+                for key, parser in schema.items()
+            }
+        else:
+            return {
+                rename_(key): item
+                for key, item in value.items()
+            }
+
+    if value is not _unset:
+        return parse(value)
+    else:
+        return parse
 
 
 def parse_bytes(
